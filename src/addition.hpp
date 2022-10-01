@@ -13,20 +13,38 @@
 #ifndef QUICK_MATHS_ADDITION_HPP
 # define QUICK_MATHS_ADDITION_HPP
 
-// base
-template <int...>
-struct sum {};
+/////////////
+// Int sum //
+/////////////
 
-// single value
-template <int val>
-struct sum<val> {
-	const static int value = val;
-};
+	// base
+	template <int...>
+		struct int_sum {};
 
-// recursive addition
-template <int val, int ...list>
-struct sum<val, list...> {
-	const static int value = val + sum<list...>::value;
-};
+	// single value
+	template <int val>
+	struct int_sum<val> {
+		const static int value = val;
+	};
+
+	// recursive addition
+	template <int val, int ...list>
+	struct int_sum<val, list...> {
+		const static int value = val + int_sum<list...>::value;
+	};
+
+/////////////////
+// Generic sum //
+/////////////////
+
+	template <auto ...args>
+	struct __sum
+	{
+		static const auto value = (0 + ... + args);
+	};
+
+	// alias decleration
+	template<auto ...args>
+		auto sum = __sum<args...>::value;
 
 #endif
