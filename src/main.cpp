@@ -16,5 +16,6 @@ int main(void)
 	std::cout << "56: " << metatoi<'5', '6'>::value << std::endl;
 	std::cout << "222: " << metatoi<'2', '2', '2'>::value << std::endl;
 	std::cout << "45677886: " << metatoi<'4', '5', '6', '7', '7', '8', '8', '6'>::value << std::endl;
+	// std::cout << "-10: " << metatoi<'-', '1', '0'>::value << std::endl;
 
 }
