@@ -28,12 +28,46 @@ void SplitContainerAndValue(const Container<Key, Value>& contianer)
 	std::cout << "A `" << typeid(Container<Key, Value>).name() << "` with key type: `" << typeid(Key).name() << "` and value type: `" << typeid(Value).name() << "`\n";
 }
 
+// base
+template<class ...>
+struct GetFirstTypeOfParameterPack
+{
+};
+
+// single value (gets called if only one value in pack)
+template<class T>
+struct GetFirstTypeOfParameterPack<T>
+{
+	using type = T;
+};
+
+// Extract first value from pack.
+template<class T, class ...Ts>
+struct GetFirstTypeOfParameterPack<T, Ts...>
+{
+	using type = T;
+};
+
+
 // But it would be cool if we had only one function to do this.
 // Here we have an additional parameter pack that catches all the template arguments of the container.
 template <class T, template<class ...> class Container, class ...AdditionalContainerParams>
 void SplitContainerAndValueAllroundVersion(const Container<T, AdditionalContainerParams...>& contianer)
 {
-	std::cout << "A `" << typeid(Container<T, AdditionalContainerParams...>).name() << "` with type `" << typeid(T).name() << "`\n";
+	if constexpr (std::is_same_v<Container<T, AdditionalContainerParams...>, std::map<T, AdditionalContainerParams...> >)
+	{
+		std::cout << "A `" << typeid(Container<T, AdditionalContainerParams...>).name();
+		std::cout << "` with key type: `" << typeid(T).name();
+		std::cout <<  "` and value type: `" << typeid(typename GetFirstTypeOfParameterPack<AdditionalContainerParams...>::type).name() << "`\n";
+	}
+	else
+	{
+		std::cout << "A `" << typeid(Container<T, AdditionalContainerParams...>).name() << "` with type `" << typeid(T).name() << "`\n";
+	}
+
+	// Or you just use the value type like this (works for both map and vector):
+	using ValueType = typename Container<T, AdditionalContainerParams...>::value_type;
+	std::cout << "value type is: `" << typeid(ValueType).name() << "`\n";
 }
 
 int main()
@@ -52,5 +86,6 @@ int main()
 	SplitContainerAndValueAllroundVersion(std::vector<float>{1, 2});
 	SplitContainerAndValueAllroundVersion(std::map<int, float>{{1, 2}});
 	SplitContainerAndValueAllroundVersion(std::map<float, int>{{1, 2}});
+	SplitContainerAndValueAllroundVersion(std::map<std::string, std::string>{{"one", "two"}});
 
 }
