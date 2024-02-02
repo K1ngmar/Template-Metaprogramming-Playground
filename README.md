@@ -1,2 +1,2 @@
-# Compiler-Math
-🧮 Making the C++ compiler do mathematical equations
+# Template metaprogramming
+🧮 Learning, experimenting and playing around with template metaprogramming in c++
