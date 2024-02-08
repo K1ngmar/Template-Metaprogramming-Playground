@@ -17,7 +17,7 @@ namespace km
 		}
 	};
 
-	template <class ...Ts>
+	template <size_t i, class ...Ts>
 	struct Tuple__impl {};
 
 	template <size_t i, class T, class ...TrailingTypes>
@@ -37,7 +37,7 @@ namespace km
 		/*!
 		 * @brief
 		*/
-		Tuple(const Types...&& values) : TupleItem(std::forward(values))
+		Tuple(const Types&&... values) : TupleItem(std::forward(values))
 		{
 		}
 	};
