@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include "tuple_get.h"
+
 #include <stdlib.h>
 #include <utility>
 
@@ -55,6 +57,12 @@ namespace km
 		static constexpr size_t size = sizeof...(Types);
 
 	public:
+
+		template <size_t indexToGet, class valueType = GetNthTypeFromParameterPack<indexToGet, Types...> >
+		valueType& Get()
+		{
+			return TupleItem<indexToGet, valueType>::item;
+		}
 
 		/*!
 		 * @brief
