@@ -22,7 +22,6 @@ namespace km
 	struct GetNthTypeFromParameterPack__<index, T, TrailingTypes...> : public IndexType<index, T>, public GetNthTypeFromParameterPack__<index - 1, TrailingTypes...>
 	{};
 
-	// Last elem
 	template <size_t index, class T>
 	struct GetNthTypeFromParameterPack__<index, T> : public IndexType<index, T>
 	{
@@ -30,5 +29,14 @@ namespace km
 
 	template <size_t indexToGet, class ...Types>
 	using GetNthTypeFromParameterPack = GetNthTypeFromParameterPack__<indexToGet, Types...>::type;
+
+	template <class ...Types>
+	class Tuple;
+
+	template <size_t indexToGet, class ...Types, class valueType = GetNthTypeFromParameterPack<indexToGet, Types...> >
+	valueType& Get(Tuple<Types...>& tuple)
+	{
+		return tuple.template Get<indexToGet, valueType>();
+	}
 	
 }
